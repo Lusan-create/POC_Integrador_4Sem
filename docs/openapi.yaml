@@ -1,0 +1,2094 @@
+openapi: 3.0.3
+info:
+  title: API — Sistema de Gestão de Ativos
+  version: 1.0.0
+  description: Contrato da API REST consumida pela aplicação web (Vue) e pelo aplicativo
+    mobile (Flutter). Autentique em /api/auth/login/ e use o token no botão Authorize
+    (Bearer).
+paths:
+  /api/ativos/:
+    get:
+      operationId: ativos_list
+      description: RF02, RF04, RF05, RF06 — cadastro, consulta, edição e inativação
+        de ativos.
+      parameters:
+      - in: query
+        name: categoria
+        schema:
+          type: integer
+      - in: query
+        name: localizacao
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Qual campo usar ao ordenar os resultados.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: Um número de página dentro do conjunto de resultados paginado.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Número de resultados a serem retornados por página.
+        schema:
+          type: integer
+      - in: query
+        name: responsavel
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: Um termo de busca.
+        schema:
+          type: string
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - disponivel
+          - em_manutencao
+          - em_uso
+          - inativo
+        description: |-
+          * `disponivel` - Disponível
+          * `em_uso` - Em uso
+          * `em_manutencao` - Em manutenção
+          * `inativo` - Inativo
+      tags:
+      - ativos
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAtivoList'
+          description: ''
+    post:
+      operationId: ativos_create
+      description: RF02, RF04, RF05, RF06 — cadastro, consulta, edição e inativação
+        de ativos.
+      tags:
+      - ativos
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AtivoRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AtivoRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AtivoRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ativo'
+          description: ''
+  /api/ativos/{id}/:
+    get:
+      operationId: ativos_retrieve
+      description: RF02, RF04, RF05, RF06 — cadastro, consulta, edição e inativação
+        de ativos.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Um valor inteiro único que identifica este ativo.
+        required: true
+      tags:
+      - ativos
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ativo'
+          description: ''
+    put:
+      operationId: ativos_update
+      description: RF02, RF04, RF05, RF06 — cadastro, consulta, edição e inativação
+        de ativos.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Um valor inteiro único que identifica este ativo.
+        required: true
+      tags:
+      - ativos
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AtivoRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AtivoRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AtivoRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ativo'
+          description: ''
+    patch:
+      operationId: ativos_partial_update
+      description: RF02, RF04, RF05, RF06 — cadastro, consulta, edição e inativação
+        de ativos.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Um valor inteiro único que identifica este ativo.
+        required: true
+      tags:
+      - ativos
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAtivoRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAtivoRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAtivoRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ativo'
+          description: ''
+    delete:
+      operationId: ativos_destroy
+      description: RF02, RF04, RF05, RF06 — cadastro, consulta, edição e inativação
+        de ativos.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Um valor inteiro único que identifica este ativo.
+        required: true
+      tags:
+      - ativos
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/ativos/{id}/historico/:
+    get:
+      operationId: ativos_historico_retrieve
+      description: RF02, RF04, RF05, RF06 — cadastro, consulta, edição e inativação
+        de ativos.
+      summary: Histórico de movimentações e ordens de serviço (RF09)
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Um valor inteiro único que identifica este ativo.
+        required: true
+      tags:
+      - ativos
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ativo'
+          description: ''
+  /api/ativos/{id}/inativar/:
+    post:
+      operationId: ativos_inativar_create
+      description: RF02, RF04, RF05, RF06 — cadastro, consulta, edição e inativação
+        de ativos.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Um valor inteiro único que identifica este ativo.
+        required: true
+      tags:
+      - ativos
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ativo'
+          description: ''
+  /api/ativos/{id}/qrcode/:
+    get:
+      operationId: ativos_qrcode_retrieve
+      description: RF02, RF04, RF05, RF06 — cadastro, consulta, edição e inativação
+        de ativos.
+      summary: Etiqueta QR Code do ativo (PNG)
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Um valor inteiro único que identifica este ativo.
+        required: true
+      tags:
+      - ativos
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            image/png:
+              schema:
+                type: string
+                format: binary
+          description: ''
+  /api/ativos/{id}/reativar/:
+    post:
+      operationId: ativos_reativar_create
+      description: RF02, RF04, RF05, RF06 — cadastro, consulta, edição e inativação
+        de ativos.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Um valor inteiro único que identifica este ativo.
+        required: true
+      tags:
+      - ativos
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ativo'
+          description: ''
+  /api/ativos/codigo/{codigo}/:
+    get:
+      operationId: ativos_codigo_retrieve
+      description: RF03 / RNF04 — mesma rota atende a leitura da câmera e a digitação
+        manual.
+      summary: Consultar ativo pelo código lido (QR Code / código de barras) ou digitado
+      parameters:
+      - in: path
+        name: codigo
+        schema:
+          type: string
+        required: true
+      tags:
+      - ativos
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ativo'
+          description: ''
+  /api/auth/eu/:
+    get:
+      operationId: auth_eu_retrieve
+      description: Dados do usuário autenticado.
+      tags:
+      - auth
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Perfil'
+          description: ''
+  /api/auth/login/:
+    post:
+      operationId: auth_login_create
+      description: RF01 — autentica pelo e-mail e senha e devolve os tokens JWT.
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+        required: true
+      responses:
+        '200':
+          description: No response body
+  /api/auth/renovar/:
+    post:
+      operationId: auth_renovar_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+  /api/categorias/:
+    get:
+      operationId: categorias_list
+      description: Grava no log de auditoria as criações, edições e exclusões feitas
+        pelo ViewSet.
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Qual campo usar ao ordenar os resultados.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: Um termo de busca.
+        schema:
+          type: string
+      tags:
+      - categorias
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Categoria'
+          description: ''
+    post:
+      operationId: categorias_create
+      description: Grava no log de auditoria as criações, edições e exclusões feitas
+        pelo ViewSet.
+      tags:
+      - categorias
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoriaRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CategoriaRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CategoriaRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Categoria'
+          description: ''
+  /api/categorias/{id}/:
+    get:
+      operationId: categorias_retrieve
+      description: Grava no log de auditoria as criações, edições e exclusões feitas
+        pelo ViewSet.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Um valor inteiro único que identifica este categoria.
+        required: true
+      tags:
+      - categorias
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Categoria'
+          description: ''
+    put:
+      operationId: categorias_update
+      description: Grava no log de auditoria as criações, edições e exclusões feitas
+        pelo ViewSet.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Um valor inteiro único que identifica este categoria.
+        required: true
+      tags:
+      - categorias
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoriaRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CategoriaRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CategoriaRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Categoria'
+          description: ''
+    patch:
+      operationId: categorias_partial_update
+      description: Grava no log de auditoria as criações, edições e exclusões feitas
+        pelo ViewSet.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Um valor inteiro único que identifica este categoria.
+        required: true
+      tags:
+      - categorias
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCategoriaRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCategoriaRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCategoriaRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Categoria'
+          description: ''
+    delete:
+      operationId: categorias_destroy
+      description: Grava no log de auditoria as criações, edições e exclusões feitas
+        pelo ViewSet.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Um valor inteiro único que identifica este categoria.
+        required: true
+      tags:
+      - categorias
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/localizacoes/:
+    get:
+      operationId: localizacoes_list
+      description: Grava no log de auditoria as criações, edições e exclusões feitas
+        pelo ViewSet.
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Qual campo usar ao ordenar os resultados.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: Um termo de busca.
+        schema:
+          type: string
+      tags:
+      - localizacoes
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Localizacao'
+          description: ''
+    post:
+      operationId: localizacoes_create
+      description: Grava no log de auditoria as criações, edições e exclusões feitas
+        pelo ViewSet.
+      tags:
+      - localizacoes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LocalizacaoRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LocalizacaoRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LocalizacaoRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Localizacao'
+          description: ''
+  /api/localizacoes/{id}/:
+    get:
+      operationId: localizacoes_retrieve
+      description: Grava no log de auditoria as criações, edições e exclusões feitas
+        pelo ViewSet.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Um valor inteiro único que identifica este localização.
+        required: true
+      tags:
+      - localizacoes
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Localizacao'
+          description: ''
+    put:
+      operationId: localizacoes_update
+      description: Grava no log de auditoria as criações, edições e exclusões feitas
+        pelo ViewSet.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Um valor inteiro único que identifica este localização.
+        required: true
+      tags:
+      - localizacoes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LocalizacaoRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LocalizacaoRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LocalizacaoRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Localizacao'
+          description: ''
+    patch:
+      operationId: localizacoes_partial_update
+      description: Grava no log de auditoria as criações, edições e exclusões feitas
+        pelo ViewSet.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Um valor inteiro único que identifica este localização.
+        required: true
+      tags:
+      - localizacoes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedLocalizacaoRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedLocalizacaoRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedLocalizacaoRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Localizacao'
+          description: ''
+    delete:
+      operationId: localizacoes_destroy
+      description: Grava no log de auditoria as criações, edições e exclusões feitas
+        pelo ViewSet.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Um valor inteiro único que identifica este localização.
+        required: true
+      tags:
+      - localizacoes
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/logs/:
+    get:
+      operationId: logs_list
+      description: Consulta dos logs (RS04) — somente administradores; logs não podem
+        ser alterados.
+      parameters:
+      - in: query
+        name: acao
+        schema:
+          type: string
+          enum:
+          - abrir_os
+          - acesso_negado
+          - atualizar_os
+          - criar
+          - editar
+          - excluir
+          - inativar
+          - login
+          - login_falha
+          - movimentar
+          - reativar
+        description: |-
+          * `login` - Login
+          * `login_falha` - Falha de login
+          * `acesso_negado` - Acesso negado
+          * `criar` - Criação
+          * `editar` - Edição
+          * `excluir` - Exclusão
+          * `inativar` - Inativação
+          * `reativar` - Reativação
+          * `movimentar` - Movimentação
+          * `abrir_os` - Abertura de OS
+          * `atualizar_os` - Atualização de OS
+      - in: query
+        name: entidade
+        schema:
+          type: string
+      - in: query
+        name: entidade_id
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Qual campo usar ao ordenar os resultados.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: Um número de página dentro do conjunto de resultados paginado.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Número de resultados a serem retornados por página.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: Um termo de busca.
+        schema:
+          type: string
+      - in: query
+        name: usuario
+        schema:
+          type: integer
+      tags:
+      - logs
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedLogAuditoriaList'
+          description: ''
+  /api/logs/{id}/:
+    get:
+      operationId: logs_retrieve
+      description: Consulta dos logs (RS04) — somente administradores; logs não podem
+        ser alterados.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Um valor inteiro único que identifica este log de auditoria.
+        required: true
+      tags:
+      - logs
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogAuditoria'
+          description: ''
+  /api/manutencoes/:
+    get:
+      operationId: manutencoes_list
+      description: RF08 — abertura e acompanhamento de ordens de serviço. Exclusão
+        só para admin.
+      parameters:
+      - in: query
+        name: ativo
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Qual campo usar ao ordenar os resultados.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: Um número de página dentro do conjunto de resultados paginado.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Número de resultados a serem retornados por página.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: Um termo de busca.
+        schema:
+          type: string
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - aberta
+          - cancelada
+          - concluida
+          - em_andamento
+        description: |-
+          * `aberta` - Aberta
+          * `em_andamento` - Em andamento
+          * `concluida` - Concluída
+          * `cancelada` - Cancelada
+      - in: query
+        name: status__in
+        schema:
+          type: array
+          items:
+            type: string
+        description: Valores múltiplos podem ser separados por vírgulas.
+        explode: false
+        style: form
+      - in: query
+        name: tipo
+        schema:
+          type: string
+          enum:
+          - corretiva
+          - preventiva
+        description: |-
+          * `corretiva` - Corretiva
+          * `preventiva` - Preventiva
+      tags:
+      - manutencoes
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedManutencaoList'
+          description: ''
+    post:
+      operationId: manutencoes_create
+      description: RF08 — abertura e acompanhamento de ordens de serviço. Exclusão
+        só para admin.
+      tags:
+      - manutencoes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ManutencaoRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ManutencaoRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ManutencaoRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Manutencao'
+          description: ''
+  /api/manutencoes/{id}/:
+    get:
+      operationId: manutencoes_retrieve
+      description: RF08 — abertura e acompanhamento de ordens de serviço. Exclusão
+        só para admin.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Um valor inteiro único que identifica este manutenção / OS.
+        required: true
+      tags:
+      - manutencoes
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Manutencao'
+          description: ''
+    patch:
+      operationId: manutencoes_partial_update
+      description: RF08 — abertura e acompanhamento de ordens de serviço. Exclusão
+        só para admin.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Um valor inteiro único que identifica este manutenção / OS.
+        required: true
+      tags:
+      - manutencoes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedManutencaoRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedManutencaoRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedManutencaoRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Manutencao'
+          description: ''
+    delete:
+      operationId: manutencoes_destroy
+      description: RF08 — abertura e acompanhamento de ordens de serviço. Exclusão
+        só para admin.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Um valor inteiro único que identifica este manutenção / OS.
+        required: true
+      tags:
+      - manutencoes
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/movimentacoes/:
+    get:
+      operationId: movimentacoes_list
+      description: RF07 — qualquer usuário autenticado registra movimentação. Registros
+        não são editáveis.
+      parameters:
+      - in: query
+        name: ativo
+        schema:
+          type: integer
+      - in: query
+        name: destino
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Qual campo usar ao ordenar os resultados.
+        schema:
+          type: string
+      - in: query
+        name: origem
+        schema:
+          type: integer
+      - name: page
+        required: false
+        in: query
+        description: Um número de página dentro do conjunto de resultados paginado.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Número de resultados a serem retornados por página.
+        schema:
+          type: integer
+      - in: query
+        name: registrado_por
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: Um termo de busca.
+        schema:
+          type: string
+      tags:
+      - movimentacoes
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedMovimentacaoList'
+          description: ''
+    post:
+      operationId: movimentacoes_create
+      description: RF07 — qualquer usuário autenticado registra movimentação. Registros
+        não são editáveis.
+      tags:
+      - movimentacoes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MovimentacaoRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MovimentacaoRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MovimentacaoRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Movimentacao'
+          description: ''
+  /api/movimentacoes/{id}/:
+    get:
+      operationId: movimentacoes_retrieve
+      description: RF07 — qualquer usuário autenticado registra movimentação. Registros
+        não são editáveis.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Um valor inteiro único que identifica este movimentação.
+        required: true
+      tags:
+      - movimentacoes
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Movimentacao'
+          description: ''
+  /api/painel/:
+    get:
+      operationId: painel_retrieve
+      summary: Indicadores para o painel web
+      tags:
+      - painel
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/usuarios/:
+    get:
+      operationId: usuarios_list
+      description: Gestão de usuários — somente administradores.
+      parameters:
+      - in: query
+        name: cargo
+        schema:
+          type: string
+          enum:
+          - admin
+          - user
+        description: |-
+          * `admin` - Administrador
+          * `user` - Usuário
+      - name: ordering
+        required: false
+        in: query
+        description: Qual campo usar ao ordenar os resultados.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: Um número de página dentro do conjunto de resultados paginado.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Número de resultados a serem retornados por página.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: Um termo de busca.
+        schema:
+          type: string
+      tags:
+      - usuarios
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedUsuarioList'
+          description: ''
+    post:
+      operationId: usuarios_create
+      description: Gestão de usuários — somente administradores.
+      tags:
+      - usuarios
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsuarioRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UsuarioRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UsuarioRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+          description: ''
+  /api/usuarios/{id}/:
+    get:
+      operationId: usuarios_retrieve
+      description: Gestão de usuários — somente administradores.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Um valor inteiro único que identifica este usuario.
+        required: true
+      tags:
+      - usuarios
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+          description: ''
+    put:
+      operationId: usuarios_update
+      description: Gestão de usuários — somente administradores.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Um valor inteiro único que identifica este usuario.
+        required: true
+      tags:
+      - usuarios
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsuarioRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UsuarioRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UsuarioRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+          description: ''
+    patch:
+      operationId: usuarios_partial_update
+      description: Gestão de usuários — somente administradores.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Um valor inteiro único que identifica este usuario.
+        required: true
+      tags:
+      - usuarios
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUsuarioRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUsuarioRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUsuarioRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+          description: ''
+    delete:
+      operationId: usuarios_destroy
+      description: Gestão de usuários — somente administradores.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Um valor inteiro único que identifica este usuario.
+        required: true
+      tags:
+      - usuarios
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+components:
+  schemas:
+    AcaoEnum:
+      enum:
+      - login
+      - login_falha
+      - acesso_negado
+      - criar
+      - editar
+      - excluir
+      - inativar
+      - reativar
+      - movimentar
+      - abrir_os
+      - atualizar_os
+      type: string
+      description: |-
+        * `login` - Login
+        * `login_falha` - Falha de login
+        * `acesso_negado` - Acesso negado
+        * `criar` - Criação
+        * `editar` - Edição
+        * `excluir` - Exclusão
+        * `inativar` - Inativação
+        * `reativar` - Reativação
+        * `movimentar` - Movimentação
+        * `abrir_os` - Abertura de OS
+        * `atualizar_os` - Atualização de OS
+    Ativo:
+      type: object
+      description: Leitura com os dados relacionados já resolvidos; escrita pelos
+        IDs.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        identificacao:
+          type: string
+          title: Patrimônio
+          maxLength: 30
+        nome:
+          type: string
+          maxLength: 120
+        descricao:
+          type: string
+          maxLength: 255
+        categoria:
+          allOf:
+          - $ref: '#/components/schemas/Categoria'
+          readOnly: true
+        localizacao:
+          allOf:
+          - $ref: '#/components/schemas/Localizacao'
+          readOnly: true
+        responsavel:
+          allOf:
+          - $ref: '#/components/schemas/UsuarioResumo'
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/AtivoStatusEnum'
+        status_exibicao:
+          type: string
+          readOnly: true
+        ultima_manutencao:
+          type: string
+          format: date
+          readOnly: true
+          nullable: true
+        proxima_manutencao:
+          type: string
+          format: date
+          nullable: true
+        criado_em:
+          type: string
+          format: date-time
+          readOnly: true
+        atualizado_em:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - atualizado_em
+      - categoria
+      - criado_em
+      - id
+      - identificacao
+      - localizacao
+      - nome
+      - responsavel
+      - status_exibicao
+      - ultima_manutencao
+    AtivoRequest:
+      type: object
+      description: Leitura com os dados relacionados já resolvidos; escrita pelos
+        IDs.
+      properties:
+        identificacao:
+          type: string
+          minLength: 1
+          title: Patrimônio
+          maxLength: 30
+        nome:
+          type: string
+          minLength: 1
+          maxLength: 120
+        descricao:
+          type: string
+          maxLength: 255
+        categoria_id:
+          type: integer
+          writeOnly: true
+        localizacao_id:
+          type: integer
+          writeOnly: true
+        responsavel_id:
+          type: integer
+          writeOnly: true
+          nullable: true
+        status:
+          $ref: '#/components/schemas/AtivoStatusEnum'
+        proxima_manutencao:
+          type: string
+          format: date
+          nullable: true
+      required:
+      - categoria_id
+      - identificacao
+      - localizacao_id
+      - nome
+    AtivoResumo:
+      type: object
+      properties:
+        id:
+          type: integer
+        identificacao:
+          type: string
+        nome:
+          type: string
+      required:
+      - id
+      - identificacao
+      - nome
+    AtivoStatusEnum:
+      enum:
+      - disponivel
+      - em_uso
+      - em_manutencao
+      - inativo
+      type: string
+      description: |-
+        * `disponivel` - Disponível
+        * `em_uso` - Em uso
+        * `em_manutencao` - Em manutenção
+        * `inativo` - Inativo
+    CargoEnum:
+      enum:
+      - admin
+      - user
+      type: string
+      description: |-
+        * `admin` - Administrador
+        * `user` - Usuário
+    Categoria:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nome:
+          type: string
+          maxLength: 80
+        criado_em:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - criado_em
+      - id
+      - nome
+    CategoriaRequest:
+      type: object
+      properties:
+        nome:
+          type: string
+          minLength: 1
+          maxLength: 80
+      required:
+      - nome
+    Localizacao:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nome:
+          type: string
+          maxLength: 80
+        descricao:
+          type: string
+          nullable: true
+          maxLength: 255
+        criado_em:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - criado_em
+      - id
+      - nome
+    LocalizacaoRequest:
+      type: object
+      properties:
+        nome:
+          type: string
+          minLength: 1
+          maxLength: 80
+        descricao:
+          type: string
+          nullable: true
+          maxLength: 255
+      required:
+      - nome
+    LogAuditoria:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        usuario:
+          type: integer
+          nullable: true
+        usuario_email:
+          type: string
+          maxLength: 255
+        acao:
+          $ref: '#/components/schemas/AcaoEnum'
+        acao_exibicao:
+          type: string
+          readOnly: true
+        entidade:
+          type: string
+          maxLength: 40
+        entidade_id:
+          type: string
+          maxLength: 40
+        descricao:
+          type: string
+          maxLength: 500
+        detalhes: {}
+        ip:
+          type: string
+          nullable: true
+        criado_em:
+          type: string
+          format: date-time
+      required:
+      - acao
+      - acao_exibicao
+      - id
+    LoginRequest:
+      type: object
+      description: Login por e-mail e senha; devolve os tokens JWT e os dados do usuário.
+      properties:
+        email:
+          type: string
+          writeOnly: true
+          minLength: 1
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - email
+      - password
+    Manutencao:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        ativo:
+          allOf:
+          - $ref: '#/components/schemas/AtivoResumo'
+          readOnly: true
+        tipo:
+          $ref: '#/components/schemas/TipoEnum'
+        tipo_exibicao:
+          type: string
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/ManutencaoStatusEnum'
+        status_exibicao:
+          type: string
+          readOnly: true
+        descricao:
+          type: string
+          nullable: true
+          maxLength: 500
+        aberta_em:
+          type: string
+          format: date-time
+          readOnly: true
+        realizada_em:
+          type: string
+          format: date
+          nullable: true
+        proxima_prevista:
+          type: string
+          format: date
+          nullable: true
+        custo:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          nullable: true
+        registrado_por:
+          allOf:
+          - $ref: '#/components/schemas/UsuarioResumo'
+          readOnly: true
+        criado_em:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - aberta_em
+      - ativo
+      - criado_em
+      - id
+      - registrado_por
+      - status_exibicao
+      - tipo_exibicao
+    ManutencaoRequest:
+      type: object
+      properties:
+        ativo_id:
+          type: integer
+          writeOnly: true
+        tipo:
+          $ref: '#/components/schemas/TipoEnum'
+        status:
+          $ref: '#/components/schemas/ManutencaoStatusEnum'
+        descricao:
+          type: string
+          nullable: true
+          maxLength: 500
+        realizada_em:
+          type: string
+          format: date
+          nullable: true
+        proxima_prevista:
+          type: string
+          format: date
+          nullable: true
+        custo:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          nullable: true
+      required:
+      - ativo_id
+    ManutencaoStatusEnum:
+      enum:
+      - aberta
+      - em_andamento
+      - concluida
+      - cancelada
+      type: string
+      description: |-
+        * `aberta` - Aberta
+        * `em_andamento` - Em andamento
+        * `concluida` - Concluída
+        * `cancelada` - Cancelada
+    Movimentacao:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        ativo:
+          allOf:
+          - $ref: '#/components/schemas/AtivoResumo'
+          readOnly: true
+        origem:
+          allOf:
+          - $ref: '#/components/schemas/Localizacao'
+          readOnly: true
+        destino:
+          allOf:
+          - $ref: '#/components/schemas/Localizacao'
+          readOnly: true
+        observacao:
+          type: string
+          maxLength: 500
+        registrado_por:
+          allOf:
+          - $ref: '#/components/schemas/UsuarioResumo'
+          readOnly: true
+        realizada_em:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - ativo
+      - destino
+      - id
+      - origem
+      - realizada_em
+      - registrado_por
+    MovimentacaoRequest:
+      type: object
+      properties:
+        ativo_id:
+          type: integer
+          writeOnly: true
+        destino_id:
+          type: integer
+          writeOnly: true
+        observacao:
+          type: string
+          maxLength: 500
+      required:
+      - ativo_id
+      - destino_id
+    PaginatedAtivoList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Ativo'
+    PaginatedLogAuditoriaList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/LogAuditoria'
+    PaginatedManutencaoList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Manutencao'
+    PaginatedMovimentacaoList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Movimentacao'
+    PaginatedUsuarioList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Usuario'
+    PatchedAtivoRequest:
+      type: object
+      description: Leitura com os dados relacionados já resolvidos; escrita pelos
+        IDs.
+      properties:
+        identificacao:
+          type: string
+          minLength: 1
+          title: Patrimônio
+          maxLength: 30
+        nome:
+          type: string
+          minLength: 1
+          maxLength: 120
+        descricao:
+          type: string
+          maxLength: 255
+        categoria_id:
+          type: integer
+          writeOnly: true
+        localizacao_id:
+          type: integer
+          writeOnly: true
+        responsavel_id:
+          type: integer
+          writeOnly: true
+          nullable: true
+        status:
+          $ref: '#/components/schemas/AtivoStatusEnum'
+        proxima_manutencao:
+          type: string
+          format: date
+          nullable: true
+    PatchedCategoriaRequest:
+      type: object
+      properties:
+        nome:
+          type: string
+          minLength: 1
+          maxLength: 80
+    PatchedLocalizacaoRequest:
+      type: object
+      properties:
+        nome:
+          type: string
+          minLength: 1
+          maxLength: 80
+        descricao:
+          type: string
+          nullable: true
+          maxLength: 255
+    PatchedManutencaoRequest:
+      type: object
+      properties:
+        ativo_id:
+          type: integer
+          writeOnly: true
+        tipo:
+          $ref: '#/components/schemas/TipoEnum'
+        status:
+          $ref: '#/components/schemas/ManutencaoStatusEnum'
+        descricao:
+          type: string
+          nullable: true
+          maxLength: 500
+        realizada_em:
+          type: string
+          format: date
+          nullable: true
+        proxima_prevista:
+          type: string
+          format: date
+          nullable: true
+        custo:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          nullable: true
+    PatchedUsuarioRequest:
+      type: object
+      properties:
+        nome:
+          type: string
+          minLength: 1
+          maxLength: 120
+        email:
+          type: string
+          format: email
+          minLength: 1
+          maxLength: 255
+        senha:
+          type: string
+          writeOnly: true
+          minLength: 1
+        data_nascimento:
+          type: string
+          format: date
+          nullable: true
+        cargo:
+          $ref: '#/components/schemas/CargoEnum'
+    Perfil:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nome:
+          type: string
+          maxLength: 120
+        email:
+          type: string
+          format: email
+          maxLength: 255
+        cargo:
+          $ref: '#/components/schemas/CargoEnum'
+        cargo_exibicao:
+          type: string
+          readOnly: true
+      required:
+      - cargo_exibicao
+      - email
+      - id
+      - nome
+    TipoEnum:
+      enum:
+      - corretiva
+      - preventiva
+      type: string
+      description: |-
+        * `corretiva` - Corretiva
+        * `preventiva` - Preventiva
+    TokenRefresh:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+      required:
+      - access
+    TokenRefreshRequest:
+      type: object
+      properties:
+        refresh:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - refresh
+    Usuario:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nome:
+          type: string
+          maxLength: 120
+        email:
+          type: string
+          format: email
+          maxLength: 255
+        data_nascimento:
+          type: string
+          format: date
+          nullable: true
+        cargo:
+          $ref: '#/components/schemas/CargoEnum'
+        cargo_exibicao:
+          type: string
+          readOnly: true
+        criado_em:
+          type: string
+          format: date-time
+          readOnly: true
+        atualizado_em:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - atualizado_em
+      - cargo_exibicao
+      - criado_em
+      - email
+      - id
+      - nome
+    UsuarioRequest:
+      type: object
+      properties:
+        nome:
+          type: string
+          minLength: 1
+          maxLength: 120
+        email:
+          type: string
+          format: email
+          minLength: 1
+          maxLength: 255
+        senha:
+          type: string
+          writeOnly: true
+          minLength: 1
+        data_nascimento:
+          type: string
+          format: date
+          nullable: true
+        cargo:
+          $ref: '#/components/schemas/CargoEnum'
+      required:
+      - email
+      - nome
+    UsuarioResumo:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nome:
+          type: string
+          maxLength: 120
+        email:
+          type: string
+          format: email
+          maxLength: 255
+      required:
+      - email
+      - id
+      - nome
+    UsuarioResumoRequest:
+      type: object
+      properties:
+        nome:
+          type: string
+          minLength: 1
+          maxLength: 120
+        email:
+          type: string
+          format: email
+          minLength: 1
+          maxLength: 255
+      required:
+      - email
+      - nome
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
