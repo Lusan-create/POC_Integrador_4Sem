@@ -1,0 +1,7 @@
+# Arquivos de ambiente com segredos
+.env
+# Editores / SO
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
