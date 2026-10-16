@@ -1,0 +1,27 @@
+# Banco de dados PostgreSQL 16 em contêiner Docker.
+# Uso (dentro de src\backend):  docker compose up -d
+# Nome do banco, usuário, senha e porta vêm do .env desta pasta (os mesmos usados pelo Django).
+name: gestao-ativos
+
+services:
+  banco:
+    image: postgres:16
+    container_name: gestao_ativos_banco
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NOME:-gestao_ativos}
+      POSTGRES_USER: ${DB_USUARIO:-gestao_ativos}
+      POSTGRES_PASSWORD: ${DB_SENHA:?defina DB_SENHA no .env}
+      TZ: America/Sao_Paulo
+    ports:
+      - "${DB_PORTA:-5432}:5432"
+    volumes:
+      - dados_banco:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  dados_banco:

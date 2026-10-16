@@ -1,0 +1,121 @@
+:root {
+  /* Paleta do Figma (4SEM_INTEGRADOR) */
+  --marinho: #1b325f;
+  --primaria: #3a89c9;
+  --primaria-escura: #1b325f;
+  --azul-claro: #9cc4e4;
+  --fundo: #e9f2f9;
+  --destaque: #f26c4f;
+  --superficie: #ffffff;
+  --borda: #d3e3f1;
+  --texto: #1b325f;
+  --texto-suave: #5b6b84;
+  --verde: #1f8a4c;
+  --verde-fundo: #e5f4ea;
+  --azul-fundo: #e9f2f9;
+  --laranja: #c8462b;
+  --laranja-fundo: #fde6e0;
+  --vermelho: #c0392b;
+  --cinza-fundo: #eceef2;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  color: var(--texto);
+  background: var(--fundo);
+  font-size: 14px;
+}
+
+* { box-sizing: border-box; }
+/* Cursor de texto e cursor piscando só nos campos de digitação. O caret-color transparente
+   esconde o cursor da "navegação por cursor" do navegador (F7) nos textos comuns. */
+body { margin: 0; cursor: default; caret-color: transparent; }
+input, textarea { cursor: text; caret-color: auto; }
+select, input[type="checkbox"], input[type="radio"], input[type="date"] { cursor: pointer; }
+a { color: var(--primaria); text-decoration: none; }
+a:hover { text-decoration: underline; }
+h1 { font-size: 22px; margin: 0 0 4px; }
+h2 { font-size: 16px; margin: 0 0 12px; }
+/* Seta de voltar: laranja das bordas dos ícones do menu. */
+.voltar { display: inline-flex; padding: 2px; margin-bottom: 8px; border-radius: 6px; }
+.voltar svg { fill: none; stroke: var(--destaque); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.voltar:hover { background: #fde6e0; }
+.subtitulo { color: var(--texto-suave); margin: 0 0 20px; }
+
+/* ---------- blocos ---------- */
+.cartao {
+  background: var(--superficie); border: 1px solid var(--borda); border-radius: 12px; padding: 18px;
+}
+.cabecalho-pagina {
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.grade { display: grid; gap: 16px; }
+.grade-2 { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+.linha { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.espaco { flex: 1; }
+
+/* ---------- formulários ---------- */
+label { display: block; font-size: 12px; color: var(--texto-suave); margin-bottom: 4px; font-weight: 500; }
+input, select, textarea {
+  width: 100%; padding: 9px 11px; border: 1px solid var(--borda); border-radius: 8px;
+  font: inherit; color: inherit; background: #fff;
+}
+input:focus, select:focus, textarea:focus { outline: 2px solid var(--azul-claro); border-color: var(--primaria); }
+textarea { resize: vertical; min-height: 70px; }
+.campo { margin-bottom: 14px; }
+.campo .erro-campo { color: var(--vermelho); font-size: 12px; margin-top: 4px; }
+.campos-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 14px; }
+@media (max-width: 640px) { .campos-2 { grid-template-columns: 1fr; } }
+
+/* ---------- botões ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 9px 16px; border-radius: 8px; border: 1px solid transparent; background: var(--fundo);
+  font: inherit; font-weight: 600; cursor: pointer; color: var(--texto); white-space: nowrap;
+}
+.btn:hover { background: var(--azul-claro); text-decoration: none; }
+.btn:disabled { opacity: .55; cursor: not-allowed; }
+.btn-primario { background: var(--primaria); border-color: var(--primaria); color: #fff; }
+.btn-primario:hover { background: var(--primaria-escura); }
+.btn-perigo { color: var(--vermelho); background: #fde6e0; }
+.btn-perigo:hover { background: #fbd3c9; }
+.btn-pequeno { padding: 5px 10px; font-size: 13px; }
+.btn-icone { border: 0; background: none; cursor: pointer; font-size: 16px; color: var(--texto-suave); }
+
+/* ---------- tabelas ---------- */
+.tabela-container { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+th {
+  text-align: left; font-size: 12px; color: var(--texto-suave); font-weight: 600;
+  padding: 10px 12px; border-bottom: 1px solid var(--borda); white-space: nowrap;
+}
+td { padding: 11px 12px; border-bottom: 1px solid var(--borda); vertical-align: middle; }
+tr:last-child td { border-bottom: 0; }
+tr.clicavel { cursor: pointer; }
+tr.clicavel:hover td { background: var(--fundo); }
+.vazio { text-align: center; color: var(--texto-suave); padding: 28px; }
+.mono { font-weight: 700; letter-spacing: .02em; white-space: nowrap; }
+
+/* ---------- selos ---------- */
+.selo {
+  display: inline-block; padding: 3px 9px; border-radius: 999px; font-size: 12px; font-weight: 600;
+  white-space: nowrap;
+}
+.selo.verde { background: var(--verde-fundo); color: var(--verde); }
+.selo.azul { background: var(--azul-fundo); color: var(--primaria); }
+.selo.laranja { background: var(--laranja-fundo); color: var(--laranja); }
+.selo.cinza { background: var(--cinza-fundo); color: var(--texto-suave); }
+
+.alerta { padding: 10px 12px; border-radius: 8px; margin-bottom: 14px; }
+.alerta.erro { background: #fdecea; color: var(--vermelho); }
+.alerta.sucesso { background: var(--verde-fundo); color: var(--verde); }
+.alerta.info { background: var(--laranja-fundo); color: var(--laranja); }
+
+.paginacao { display: flex; justify-content: flex-end; align-items: center; gap: 10px; margin-top: 12px; color: var(--texto-suave); }
+
+/* ---------- lista de dados (rótulo/valor) ---------- */
+.dados { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 14px; margin: 0; }
+.dados dt { font-size: 12px; color: var(--texto-suave); }
+.dados dd { margin: 2px 0 0; font-weight: 600; }
+
+@media print {
+  .nao-imprimir { display: none !important; }
+}
