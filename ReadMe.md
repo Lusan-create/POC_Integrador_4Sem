@@ -15,6 +15,8 @@ POC_Integrador_4Sem/
 │   ├── backend/   API REST — Python, Django, Django REST Framework, JWT, PostgreSQL
 │   ├── web/       Painel web — Vue 3, Vite, Vue Router
 │   └── mobile/    Aplicativo — Flutter (Android e Chrome)
+├── dados/         Dados simulados de 3 ativos (JSON)
+├── marcador/      QR Codes de teste desses ativos (PNG)
 └── docs/          Contrato da API (OpenAPI), rastreabilidade de requisitos, entregas
 ```
 
@@ -139,6 +141,21 @@ Mais detalhes em cada pasta: [src/backend/README.md](src/backend/README.md),
 Criados com `python manage.py popular_demo`.
 
 Código de ativo para testar a consulta: **PT-000324**.
+
+### Marcadores de teste
+
+A pasta [`marcador/`](marcador/) tem o QR Code de 3 ativos simulados, e a pasta [`dados/`](dados/) tem os
+dados esperados de cada um (mesmo nome de arquivo):
+
+| Marcador | Ativo esperado |
+|---|---|
+| [PT-000324.png](marcador/PT-000324.png) | Notebook Dell Latitude 5420 — Lab. Info. 1 — Em uso |
+| [PT-000410.png](marcador/PT-000410.png) | Desktop HP ProDesk 400 G7 — Lab. Info. 1 — Em uso |
+| [PT-000600.png](marcador/PT-000600.png) | Projetor Epson PowerLite X49 — Lab. Info. 1 — Em uso |
+
+Com a API rodando e o `popular_demo` executado, abra a aba **CAMERA** do app e aponte para o PNG (na tela
+ou impresso). O app mostra a ficha do ativo com os dados do JSON correspondente. O QR contém só o código do
+patrimônio, igual à etiqueta gerada pelo site.
 
 ## Perfis de acesso
 

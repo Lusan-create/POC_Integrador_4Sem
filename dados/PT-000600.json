@@ -1,0 +1,13 @@
+{
+  "identificacao": "PT-000600",
+  "nome": "Projetor Epson PowerLite X49",
+  "categoria": "Projetor",
+  "localizacao": {
+    "nome": "Lab. Info. 1",
+    "descricao": "Laboratório de Informática 1 — bloco A"
+  },
+  "responsavel": "Carlos Mendes",
+  "status": "em_uso",
+  "status_exibicao": "Em uso",
+  "dado_simulado": true
+}

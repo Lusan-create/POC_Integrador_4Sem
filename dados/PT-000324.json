@@ -1,0 +1,13 @@
+{
+  "identificacao": "PT-000324",
+  "nome": "Notebook Dell Latitude 5420",
+  "categoria": "Notebook",
+  "localizacao": {
+    "nome": "Lab. Info. 1",
+    "descricao": "Laboratório de Informática 1 — bloco A"
+  },
+  "responsavel": "Carlos Mendes",
+  "status": "em_uso",
+  "status_exibicao": "Em uso",
+  "dado_simulado": true
+}
